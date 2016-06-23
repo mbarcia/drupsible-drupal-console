@@ -20,11 +20,11 @@
     force: no
 
 - name: Init drupal console
-  command: "drupal init"
+  shell: "drupal init"
+  become: "{{ app_user }}"
   args:
     creates: "/home/{{ app_user }}/.console/config.yml"
     chdir: "/home/{{ app_user }}"
-    executable: /bin/bash
 
 - name: Enable autocomplete feature system-wide
   template:
