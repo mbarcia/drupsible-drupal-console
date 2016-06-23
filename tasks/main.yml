@@ -1,0 +1,41 @@
+---
+- name: Assures .console dir exists in each home directory
+  file:
+    path: "/home/{{ app_user }}/.console"
+    state: directory
+    owner: "{{ app_user }}"
+    group: "{{ app_group }}"
+
+- name: Install drupal console
+  composer:
+    arguments: "drupal/console:{{ drupal_console_version }}"
+    command: require
+    working_dir: /usr/share/composer
+
+- name: Make drupal console available globally
+  file:
+    src: /usr/share/composer/vendor/bin/drupal
+    dest: /usr/bin/drupal
+    state: link
+    force: no
+
+- name: Init drupal console
+  command: "drupal init"
+  args:
+    creates: "/home/{{ app_user }}/.console/config.yml"
+    chdir: "/home/{{ app_user }}"
+    executable: /bin/bash
+
+- name: Enable autocomplete feature system-wide
+  template:
+    src: console.rc.j2
+    dest: /etc/bash_completion.d/drupal
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+
+- name: Enable autocomplete feature for the current session
+  shell: "source /etc/bash_completion.d/drupal"
+  args:
+    executable: /bin/bash
+  changed_when: false
