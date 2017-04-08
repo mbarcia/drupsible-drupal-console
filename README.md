@@ -20,11 +20,11 @@ drupal_console_version: "@stable"
 
 Example Playbook
 ----------------
-This playbook will install PHP-FPM, and the latest version of both composer and drupal console.
+This playbook will install PHP-FPM, the latest version of composer and the stable version of drupal console.
 ```
 - name: "My Project"
   hosts: [ myproject-prod_deploy ]
-  become: True
+  become: yes
 
   roles:
   - role: drupsible.php
