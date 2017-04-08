@@ -3,14 +3,15 @@
   file:
     path: "/home/{{ app_user }}/.console"
     state: directory
-    owner: "{{ app_user }}"
-    group: "{{ app_group }}"
+    owner: "{{ drupal_console_user }}"
+    group: "{{ drupal_console_group }}"
 
 - name: Install drupal console
   composer:
-    arguments: "drupal/console:{{ drupal_console_version }}"
+    arguments: "drupal/console:{{ drupal_console_version|d('@stable') }}"
     command: require
     working_dir: /usr/share/composer
+  become: "{{ drupal_console_user }}"
 
 - name: Make drupal console available globally
   file:
@@ -21,10 +22,10 @@
 
 - name: Init drupal console
   shell: "drupal init"
-  become: "{{ app_user }}"
+  become: "{{ drupal_console_user }}"
   args:
-    creates: "/home/{{ app_user }}/.console/config.yml"
-    chdir: "/home/{{ app_user }}"
+    creates: "/home/{{ drupal_console_user }}/.console/config.yml"
+    chdir: "/home/{{ drupal_console_user }}"
 
 - name: Enable autocomplete feature system-wide
   template:
@@ -33,9 +34,3 @@
     owner: 'root'
     group: 'root'
     mode: '0644'
-
-- name: Enable autocomplete feature for the current session
-  shell: "source /etc/bash_completion.d/drupal"
-  args:
-    executable: /bin/bash
-  changed_when: false

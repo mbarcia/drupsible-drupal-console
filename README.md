@@ -32,8 +32,11 @@ This playbook will install PHP-FPM, and the latest version of both composer and 
     composer_installer_url: "https://getcomposer.org/installer"
     composer_installer_checksum_enabled: no
   - role: drupsible.drupal-console
-    drupal_console_version: "@latest"
+    drupal_console_user: vagrant
+    drupal_console_group: www-data
 ```
+
+Please note that drupal_console_user and drupal_console_group are mandatory.
 
 License
 -------
