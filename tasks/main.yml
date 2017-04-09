@@ -11,7 +11,6 @@
     arguments: "drupal/console:{{ drupal_console_version|d('@stable') }}"
     command: require
     working_dir: /usr/share/composer
-  become: "{{ drupal_console_user }}"
 
 - name: Make drupal console available globally
   file:
