@@ -19,13 +19,6 @@
     state: link
     force: no
 
-- name: Init drupal console
-  shell: "drupal init"
-  become: "{{ drupal_console_user }}"
-  args:
-    creates: "/home/{{ drupal_console_user }}/.console/config.yml"
-    chdir: "/home/{{ drupal_console_user }}"
-
 - name: Enable autocomplete feature system-wide
   template:
     src: console.rc.j2
